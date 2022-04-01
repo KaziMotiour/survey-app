@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'survey',
     'authentication',
     'corsheaders',
+    'survey_record',
 
 ]
 
