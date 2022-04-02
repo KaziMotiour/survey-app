@@ -8,7 +8,6 @@ User = get_user_model()
 class Survey(models.Model):
     title = models.CharField(max_length=1000)
     timer = models.IntegerField(default=5)
-    attendant_user = models.ManyToManyField(User, blank=True)
     timeStamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -34,7 +33,7 @@ class question_options(models.Model):
     survey_question = models.ForeignKey('survey.Servay_Question', related_name="question", on_delete=models.CASCADE)
     survay_of_option = models.ForeignKey('survey.Survey', related_name="survay_of_option", on_delete=models.CASCADE)
     option = models.CharField(max_length=500)
-    voter = models.ManyToManyField(User, blank=True)
+    
     
     def __str__(self) -> str:
         return self.option
