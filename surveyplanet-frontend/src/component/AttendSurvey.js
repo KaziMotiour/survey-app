@@ -10,8 +10,11 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
+import {useParams, useHistory} from 'react-router-dom'
 
 const AttendSurvey = () => {
+  const userInfo = localStorage.getItem('userInfo')
+  const history = useHistory()  
   const [surveyQuestion, setSurveyQuestion] = useState();
   const [questionIndex, setQuestionIndex] = useState(0);
   const [seconds, setseconds] = useState(59);
@@ -21,9 +24,19 @@ const AttendSurvey = () => {
     surveyQuestion &&
     surveyQuestion.survay_of_question &&
     surveyQuestion.survay_of_question.length;
-
+  const {id} = useParams()
 
   var timer;
+
+  useEffect(()=>{
+
+    if(!userInfo){
+      history.push('/login')
+    }
+
+  },[userInfo])
+
+
   useEffect(() => {
     timer = setInterval(() => {
       setseconds(seconds - 1);
@@ -62,7 +75,7 @@ const AttendSurvey = () => {
 
   useEffect(async () => {
     try {
-      const data = await axios.get(" http://127.0.0.1:8000/survey/detail/19");
+      const data = await axios.get(`http://127.0.0.1:8000/survey/detail/${id}`);
       const survayQ = data.data;
       const finalSurveyQ = {
         ...survayQ,

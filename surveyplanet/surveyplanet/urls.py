@@ -25,7 +25,7 @@ from .views import MyTokenObtainPairView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('registration/', include('authentication.urls')),
+    path('singup/', include('authentication.urls')),
     path('survey/', include('survey.urls')),
     path('user/survey/', include('survey_record.urls')),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

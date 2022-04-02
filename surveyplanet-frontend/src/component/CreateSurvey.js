@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -10,10 +10,14 @@ import {
 } from "react-bootstrap";
 import axios from 'axios'
 import "./css/createSurvey.css";
+import {useHistory} from 'react-router-dom'
 
 const CreateSurvey = () => {
   // question
   // setQuestion
+  const history = useHistory()
+  const userInfo = localStorage.getItem('userInfo')
+  // localStorage.removeItem('userInfo')
   const [emptyField, setEpmtyField]=useState(false)
   const [surveyInfo, setSurveyInfo] = useState({
       title:"",
@@ -22,6 +26,16 @@ const CreateSurvey = () => {
   const [question, setQuestion] = useState([
     { question_title: "", question_type: "text", options: [{ qts: "" }] },
   ]);
+  
+console.log(userInfo);
+  useEffect(()=>{
+
+    if(!userInfo){
+      history.push('/login')
+    }
+
+  },[userInfo])
+
 
   const handleFormChange = (index, event) => {
     let data = [...question];
