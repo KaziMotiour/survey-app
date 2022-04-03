@@ -9,22 +9,24 @@ import {
   Button,
 } from "react-bootstrap";
 import axios from 'axios'
-import "./css/createSurvey.css";
 import {useHistory} from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid';
+import Header from '../component/Header'
+
 
 const CreateSurvey = () => {
   // question
   // setQuestion
   const history = useHistory()
   const userInfo = localStorage.getItem('userInfo')
-  // localStorage.removeItem('userInfo')
+ 
   const [emptyField, setEpmtyField]=useState(false)
   const [surveyInfo, setSurveyInfo] = useState({
       title:"",
       timer:5,
       })
   const [question, setQuestion] = useState([
-    { question_title: "", question_type: "text", options: [{ qts: "" }] },
+    { id:uuidv4(),  question_title: "", question_type: "text", options: [{ qts: "" }] },
   ]);
   
 console.log(userInfo);
@@ -44,7 +46,7 @@ console.log(userInfo);
   };
 
   const addFields = () => {
-    let newfield = { question_title: "", question_type: "text", options: [{ qts: "" }] };
+    let newfield = {id: uuidv4(), question_title: "", question_type: "text", options: [{ qts: "" }] };
 
     setQuestion([...question, newfield]);
   };
@@ -68,7 +70,7 @@ console.log(userInfo);
     let data = [...question];
     const remvoedItem = data[index];
     const newList = data.filter(
-      (item) => item.question_title !== remvoedItem.question_title
+      (item) => item.id !== remvoedItem.id
     );
     setQuestion(newList);
   };
@@ -84,7 +86,8 @@ console.log(userInfo);
         setEpmtyField(false)
     try{
         const data  =  await axios.post('http://127.0.0.1:8000/survey/create/',{surveyInfo , question}, config)
-        console.log(data);
+        console.log(data.data);
+        history.push('/')
     }catch (error){
         console.log(error);
     
@@ -98,7 +101,9 @@ console.log(userInfo);
   console.log(surveyInfo);
 
   return (
-    <Container>
+    <div>    
+      <Header />
+      <Container>
       <h1>Create a new survey</h1>
 
       <Form>
@@ -122,18 +127,19 @@ console.log(userInfo);
         </Form.Group>
       </Form>
 
-      <h2 style={{borderBottom:'3px solid black', width:'140px'}}>Questions</h2>
+      <h2 style={{borderBottom:'3px solid black', width:'140px', marginBottom:'30px'}}>Questions</h2>
 
       <Form onSubmit={submit}>
         {question &&
           question.map((input, index1) => {
             return (
-              <div key={index1} className="mb-5">
+              <div key={index1} style={{marginBottom:'150px'}} >
                   <div style={{}}>
                    <h4>Questions {index1+1}</h4>
-                   <Button style={{float:'right', marginTop:'-50px'}} className="addMoreOption" varient="primary" onClick={(e) => handleRemoveQuestion(index1)}>
-                      remove question {index1+1}
-                    </Button> 
+                   {index1!=0 &&  
+                   <Button  variant="danger" style={{float:'right', marginTop:'-50px'}} className="addMoreOption" onClick={(e) => handleRemoveQuestion(index1)}>
+                      remove questions {index1+1}
+                    </Button> }
                     </div> <br/>
 
                 <Form.Group
@@ -202,7 +208,7 @@ console.log(userInfo);
         </Form.Group>
         </> 
                       ))}
-                    <Button className="addMoreOption" varient="primary" onClick={(e) => handleAddOption(index1)}>
+                    <Button style={{float:'right'}} className="addMoreOption" varient="primary" onClick={(e) => handleAddOption(index1)}>
                       Add More option
                     </Button>   
                   </div>
@@ -219,6 +225,8 @@ console.log(userInfo);
         </div>
       </Form>
     </Container>
+    </div>
+
   );
 };
 

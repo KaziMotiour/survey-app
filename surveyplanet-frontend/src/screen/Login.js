@@ -2,10 +2,11 @@ import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 
-import {Form, Button, Row, Col, Alert, Spinner} from 'react-bootstrap'
+import {Form, Button, Row, Col, Alert, Spinner, Container} from 'react-bootstrap'
 
 
 import {useHistory, useLocation} from 'react-router-dom'
+import Header from '../component/Header'
 
 
 const Login = () => {
@@ -90,6 +91,8 @@ const Login = () => {
 
   return (
         <div>
+          <Header />
+          <Container>
         <h1>Sing in</h1>
         {error && <Alert variant="danger">{error}</Alert>}
         {cmMessage && <Alert variant="primary">{cmMessage }</Alert>}
@@ -122,6 +125,7 @@ const Login = () => {
                 New Customer? <Link to='/registration'  >Register</Link>
             </Col>
         </Row>
+        </Container>
         </div>  
   )
 }

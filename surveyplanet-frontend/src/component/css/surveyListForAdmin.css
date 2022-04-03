@@ -1,0 +1,31 @@
+.title_row{
+    
+    margin: 20px;
+    margin-bottom: 40px;
+    
+    
+   
+}
+
+
+.survey-Row{
+    height: 70px;
+    background-color:aliceblue;
+    margin: 10px;
+    margin-bottom: 15px;
+    padding-top: 10px;
+    border-radius: 5px;
+
+}
+
+.col1{
+    color: black;
+    height: 50px;
+    border-right: 1px solid black;
+    cursor: pointer;
+}
+
+.col2{
+  
+    cursor: pointer;
+}

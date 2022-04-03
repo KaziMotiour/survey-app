@@ -39,16 +39,23 @@ class ServayQuestionSerializer(serializers.ModelSerializer):
 class SurveySerializer(serializers.ModelSerializer):
     survay_of_question = ServayQuestionSerializer(many=True)
     participants = serializers.SerializerMethodField(read_only=True)
+    is_complete = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Survey
-        fields=['id', 'title','timer', 'survay_of_question', 'participants']
+        fields=['id', 'title','timer',  'participants', 'is_complete',  'survay_of_question', ]
 
     
     def get_participants(self, obj):
        
         participents = SurveyInfo.objects.filter(survey_info=obj).count()
-        print(participents)
         return participents
+
+    def get_is_complete(self, obj):
+        request = self.context.get("request")
+
+        print(request.user)
+        is_exist = SurveyInfo.objects.filter(user=request.user, survey_info=obj).exists()
+        return is_exist
 
 
 class CreateSurveySerializer(serializers.ModelSerializer):

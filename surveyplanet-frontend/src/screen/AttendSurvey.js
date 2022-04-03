@@ -2,30 +2,33 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Container,
-  Row,
-  Col,
-  Form,
-  InputGroup,
-  FormControl,
-  Button,
-  Modal,
+Row,
+Col,
+Form,
+InputGroup,
+FormControl,
+Button,
+Modal,
 } from "react-bootstrap";
 import {useParams, useHistory} from 'react-router-dom'
+import Header from '../component/Header'
 
 const AttendSurvey = () => {
-  const userInfo = localStorage.getItem('userInfo')
+  // localStorage.removeItem('userInfo')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  
   const history = useHistory()  
   const [surveyQuestion, setSurveyQuestion] = useState();
   const [questionIndex, setQuestionIndex] = useState(0);
   const [seconds, setseconds] = useState(59);
   const [minutes, setMinutes] = useState(0);
   const [questionAnser, setQuestionAnser] = useState([]);
+  const [recordSubmited, setRecordSubmited] = useState(false)
   const lenghtOfQuestion =
     surveyQuestion &&
     surveyQuestion.survay_of_question &&
     surveyQuestion.survay_of_question.length;
   const {id} = useParams()
-
   var timer;
 
   useEffect(()=>{
@@ -35,7 +38,6 @@ const AttendSurvey = () => {
     }
 
   },[userInfo])
-
 
   useEffect(() => {
     timer = setInterval(() => {
@@ -58,12 +60,32 @@ const AttendSurvey = () => {
     const config = {
         headers: {
             "content-type": "application/json",
-            Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc5OTU0MjU2LCJpYXQiOjE2NDg4NTAyNTYsImp0aSI6IjI4NDQ0ZTdkYWY5MDQ3ODFhN2Q1NzU5YjZlYjQ5YTQ5IiwidXNlcl9pZCI6Mn0.O-rLTn1T0Svb98QSzPxK6WNhNEM7dGltkNKt9f4UoQY",
+            Authorization: "Bearer "+userInfo.access,
         },
       };
 
-    const data = await axios.post(" http://127.0.0.1:8000/user/survey/record/",{surveyQuestion}, config);
-    console.log("success fully submitted", data);
+    const datas = await axios.post(" http://127.0.0.1:8000/user/survey/record/",{surveyQuestion}, config);
+    const {data} = datas
+    
+
+    if(data=='fail'){
+  
+      history.push({
+        pathname: "/record-fail",
+        state: {
+          detail: surveyQuestion && surveyQuestion.title && surveyQuestion.title,             
+        },
+      });
+    }else if(data=='success'){
+    
+      history.push({
+        pathname: "/record-success",
+        state: {
+          detail: surveyQuestion && surveyQuestion.title && surveyQuestion.title,
+        },
+      });
+    }
+    
   };
 
   const nextQuestion = () => {
@@ -73,10 +95,24 @@ const AttendSurvey = () => {
     setQuestionIndex(questionIndex - 1);
   };
 
-  useEffect(async () => {
+  useEffect( () => {
+    getSurveyQuestis()
+  }, []);
+
+  const getSurveyQuestis = async () =>{
     try {
-      const data = await axios.get(`http://127.0.0.1:8000/survey/detail/${id}`);
+      const config = {
+        headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer "+userInfo.access,
+        },
+      };
+      const data = await axios.get(`http://127.0.0.1:8000/survey/detail/${id}`, config);
       const survayQ = data.data;
+      console.log(survayQ);
+      if(survayQ.is_complete===true){
+        history.push('/')
+      }
       const finalSurveyQ = {
         ...survayQ,
         survay_of_question: survayQ.survay_of_question.map((data) => ({
@@ -96,7 +132,7 @@ const AttendSurvey = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }
 
   // question:data.question.length<1 ?data.question : data.question.map(quesions=>({
   //     ...quesions,
@@ -190,10 +226,12 @@ const AttendSurvey = () => {
 
   console.log(surveyQuestion);
   return (
+    <div>
+      <Header />
     <Container>
       <div >
-       <h3>Survey Title: {surveyQuestion && surveyQuestion.title}<span></span></h3> 
-       <h3>Time Duration: {surveyQuestion && surveyQuestion.timer}<span></span></h3> 
+       <h3>Survey Title: {surveyQuestion && surveyQuestion.title && surveyQuestion.title}<span></span></h3> 
+       <h3>Time Duration: {surveyQuestion && surveyQuestion.timer &&  surveyQuestion.timer}<span></span></h3> 
        
         <p style={{fontSize:'20px'}}>
           Time Left: {minutes}:{seconds}
@@ -201,6 +239,7 @@ const AttendSurvey = () => {
         <p style={{fontSize:'20px'}}>
           Question {questionIndex+1} Out of {lenghtOfQuestion}
         </p>
+        {recordSubmited && <p style={{color:'red'}}> You have not answerd any quesion, Please answer the question first then submit the survey.  </p>}
       </div>
 
       <Modal.Dialog>
@@ -208,14 +247,14 @@ const AttendSurvey = () => {
         <Modal.Header>
           <Modal.Title>
             {surveyQuestion &&
-              surveyQuestion.survay_of_question &&
-              surveyQuestion.survay_of_question[questionIndex].question_title}
+              surveyQuestion.survay_of_question.length>0 &&
+              surveyQuestion.survay_of_question[questionIndex].question_title ? surveyQuestion.survay_of_question[questionIndex].question_title:""    }
           </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           {surveyQuestion &&
-          surveyQuestion.survay_of_question &&
+          surveyQuestion.survay_of_question.length>0   &&
           surveyQuestion.survay_of_question[questionIndex].question_type ===
             "text" ? (
             <Form>
@@ -241,13 +280,13 @@ const AttendSurvey = () => {
               </Form.Group>
             </Form>
           ) : surveyQuestion &&
-            surveyQuestion.survay_of_question &&
+            surveyQuestion.survay_of_question.length>0 &&
             surveyQuestion.survay_of_question[questionIndex].question_type ===
               "radio" ? (
             <Form>
               <Form.Group className='mb-3' controlId='formBasicCheckbox'>
                 {surveyQuestion &&
-                  surveyQuestion.survay_of_question &&
+                  surveyQuestion.survay_of_question.length>0 &&
                   surveyQuestion.survay_of_question[questionIndex].question.map(
                     (question, index) => (
                       <Form.Check
@@ -268,7 +307,7 @@ const AttendSurvey = () => {
             <Form>
               <Form.Group className='mb-3' controlId='formBasicCheckbox'>
                 {surveyQuestion &&
-                  surveyQuestion.survay_of_question &&
+                  surveyQuestion.survay_of_question.length>0   &&
                   surveyQuestion.survay_of_question[questionIndex].question &&
                   surveyQuestion.survay_of_question[questionIndex].question.map(
                     (question, index) => (
@@ -294,20 +333,20 @@ const AttendSurvey = () => {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button style={{ marginRight: "auto" }} variant='secondary'>
+          <Button onClick={() => history.push('/')} style={{ marginRight: "auto" }} variant='secondary'>
             quit survey
           </Button>
           {questionIndex == lenghtOfQuestion - 1 && (
             <Button
             onClick={submitSurvey}
-              style={{ marginRight: "auto", marginLeft: "-80px" }}
+              style={{ marginRight: "auto", marginLeft: "-120px" }}
               variant='danger'
             >
-              Submit Survey
+              Submit
             </Button>
           )}
 
-          {questionIndex === 0 ? (
+          {questionIndex === 0  ? lenghtOfQuestion >1     && (
             <Button onClick={nextQuestion} variant='success'>
               Next Question
             </Button>
@@ -330,6 +369,7 @@ const AttendSurvey = () => {
         </Modal.Footer>
       </Modal.Dialog>
     </Container>
+    </div>
   );
 };
 

@@ -1,10 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
 import {Container, Row, Col, Form, InputGroup, FormControl} from 'react-bootstrap'
-import CreateSurvey from './component/CreateSurvey'
-import AttendSurvey from './component/AttendSurvey'
-import Login from './component/Login'
-import RegisterScreen from './component/Singup'
+import CreateSurvey from './screen/CreateSurvey'
+import AttendSurvey from './screen/AttendSurvey'
+import Login from './screen/Login'
+import RegisterScreen from './screen/Singup'
+import SurveyListForAdmin from './component/SurveyListForAdmin'
+import Header from './component/Header'
+import RecordSuccessInfo from './screen/RecordSuccessInfo'
+import RecordFailInfo from './screen/RecordFailInfo'
+import SurveyList from './screen/SurveyList'
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 
@@ -13,17 +19,20 @@ function App() {
     <Router>
    
     <main className='py-3'>
-      <Container>
+   
       <Switch>
-
+            <Route path='/record-fail' component={RecordFailInfo} exect />
+            <Route path='/record-success' component={RecordSuccessInfo} exect />
+              
             <Route path='/registration' component={RegisterScreen} exect />
             <Route path='/login' component={Login} exect />
             <Route path='/create-survey' component={CreateSurvey} exect />
             <Route path='/attending-survey/:id' component={AttendSurvey} exect />
+            <Route path='/' component={SurveyList} exect />
 
          
         </ Switch>
-      </Container>
+      
     </main>
  
   </Router>

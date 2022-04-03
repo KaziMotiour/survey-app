@@ -33,11 +33,13 @@ def recordNewSurvey(request):
                     qst = question_options.objects.get(pk=options['id'])
                     QAobj.option_answer.add(qst)
                     reacord_created=True
-    print('comed')
+
     if reacord_created:
+        print(reacord_created, 'success')
+
         return Response('success', status=status.HTTP_200_OK)
     else:
-        
+        print(reacord_created)
         survayInfo  = SurveyInfo.objects.get(pk=surveyInfoObj.id)
         survayInfo.delete()
         return Response('fail', status=status.HTTP_200_OK)
