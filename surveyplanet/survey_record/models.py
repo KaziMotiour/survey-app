@@ -21,11 +21,11 @@ class QuestionAnswer(models.Model):
     ("radio", "radio"),
     ("multiple", "multiple"))
 
-    survey_from = models.ForeignKey(SurveyInfo, related_name="survey_from", on_delete=models.CASCADE)
-    question_from = models.ForeignKey("survey.Servay_Question", related_name="question_from", on_delete=models.CASCADE)
+    from_survey = models.ForeignKey(SurveyInfo, related_name="survey_from", on_delete=models.CASCADE, null=True, blank=True)
+    question_from = models.ForeignKey("survey.Servay_Question", related_name="question_from", on_delete=models.CASCADE, null=True, blank=True)
     text_answer = models.CharField( max_length=500, null=True, blank=True)
-    question_type=models.CharField(max_length=50, choices=question_types)
-    option_answer = models.ManyToManyField("survey.question_options", related_name="option_from", blank=True)
+    question_type=models.CharField(max_length=50, choices=question_types, null=True, blank=True)
+    option_answer = models.ManyToManyField("survey.question_options", related_name="option_from", null=True, blank=True)
 
     def __str__(self) -> str:
         return self.question_from.question_title

@@ -62,7 +62,7 @@ const SurveyListForUser = () => {
             <Row key={index} className='survey-Row' >
               <Col className='col1' md={8}>
                 {survey.title}
-                <p style={{color:'red', fontSize:12}}>(Thank's you have completed the survey)</p>
+                
               </Col>
               <Col className='col2' style={{ color: "red" }}>
                 {" "}
@@ -74,7 +74,7 @@ const SurveyListForUser = () => {
               <Col onClick={e=> attendingSurvey(survey.id)} className='col1' md={8}>
                  
               {survey.title}
-              <p style={{color:'gray', fontSize:12}}>(Click on survey title to attend this survey)</p>
+              
              
               </Col>
               <Col onClick={e=> attendingSurvey(survey.id)} className='col2' style={{ color: "blue   " }}>

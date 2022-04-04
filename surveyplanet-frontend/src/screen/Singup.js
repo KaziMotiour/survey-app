@@ -14,7 +14,8 @@ const RegisterScreen = () => {
     const [password2, setPassword2] = useState('')
     const [message, setMessage]=useState(null)
     const [loading, setLoading] = useState(false)
-    const [error, seError] = useState()
+    const [error, setError] = useState()
+    const [error2, setError2] = useState(false)
     const userInfo = localStorage.getItem('userInfo')
     console.log();
 
@@ -41,7 +42,7 @@ const RegisterScreen = () => {
                     // that falls out of the range of 2xx
                     console.log(error.response.data, 'res');
                     const errors = error.response.data
-                    seError(errors)
+                    setError(errors)
                     setLoading(false)
                     console.log(error.response.status, 'res');
                     console.log(error.response.headers, 'res');
@@ -50,6 +51,8 @@ const RegisterScreen = () => {
                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                     // http.ClientRequest in node.js
                     console.log(error.request,'req');
+                    setLoading(false)
+                    setError2(true)
                   } else {
                     // Something happened in setting up the request that triggered an Error
                     console.log('Error', error.message,'msg');
@@ -119,6 +122,7 @@ const RegisterScreen = () => {
                 </Form.Control>
                 <span style={{color:"red"}}>{error && error.password2 && error.password2[0]}</span>
             </Form.Group>
+            {error2 && <p style={{color:'red'}}>Surver is Not running</p>}
             {loading ? <Spinner animation="grow" /> : 
             <Button type="submit" varient="primary">
                 Sing In

@@ -14,16 +14,17 @@ class UserSerialzers(serializers.ModelSerializer):
 
 
 class QuestionAnswerSerialzers(serializers.ModelSerializer):
-    option_answer = ServayQuestionSerializer(many=True)
+    option_answer = QuestionOptionsSerializer(many=True)
+    question_from = ServayQuestionSerializer()
     class Meta:
         model = QuestionAnswer
-        fields = ['survey_from', 'question_from', 'text_answer', 'question_type', 'option_answer']
+        fields = ['question_from', 'question_type', 'option_answer', 'text_answer']
 
 
 class surveyInfoSerialzers(serializers.ModelSerializer):
     user = UserSerialzers()
+    survey_from = QuestionAnswerSerialzers(many=True)
     survey_info = SurveySerializer()
-    survey_from = QuestionAnswerSerialzers()
     class Meta:
         model = SurveyInfo
-        fields = ['user', 'survey_info', 'survey_from', 'timestamp',]
+        fields = ['id', 'user', 'survey_info', 'user',  'survey_from', 'timestamp',]

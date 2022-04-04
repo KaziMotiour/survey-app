@@ -102,7 +102,7 @@ console.log(userInfo);
                   <Form.Label column sm='2'>
                   Question Title
                   </Form.Label>
-                  <Col sm='10'>
+                  <Col sm='8'>
                   <Form.Control style={{border:0}} question_type='text' muted   name="title" placeholder='Survey title' value={question.question_title} disabled />
                   </Col>
                 </Form.Group>
@@ -114,13 +114,14 @@ console.log(userInfo);
                    <Form.Label column sm='2'>
                     Answer 
                    </Form.Label>
-                   <Col sm='10'>
-                   <Accordion defaultActiveKey="1">
+                   <Col sm='8'>
+                   <Accordion  defaultActiveKey="1">
                         <Accordion.Item eventKey="0">
                           <Accordion.Header>You Got {question.text_answer} Answer</Accordion.Header>
                           {question.question_from && question.question_from.map((answer, index)=>(
-                              <>                          <Accordion.Body>
-                              answer {index+1}: {answer.text_answer}
+                              <> 
+                              <Accordion.Body>
+                              <p >Answer {index+1} : <span style={{color:'#0c92ee'}}>{answer.text_answer}</span></p>
                           </Accordion.Body>
                       </>
 
@@ -138,10 +139,10 @@ console.log(userInfo);
                              Option {index+1}
                           </Form.Label>
                           <Col sm='7'>
-                            <Form.Control name='qts' value={"option.qts"} question_type='text' placeholder='Add new question answer' value={option.option} disabled/>
+                            <Form.Control name='qts' question_type='text' placeholder='Add new question answer' value={option.option} disabled/>
                           </Col>
                           <Col sm='1'>
-                            <Form.Control style={{backgroundColor:'#2995bc', color:'white'}} name='qts' value={"option.qts"} question_type='text' placeholder='Add new question answer' value={option.vot_count+" vot"} disabled/>
+                            <Form.Control style={{backgroundColor:'#2995bc', color:'white'}} name='qts' question_type='text' placeholder='Add new question answer' value={option.vot_count+" vot"} disabled/>
                           </Col>
                         </Form.Group>
                         ))}

@@ -177,7 +177,7 @@ console.log(userInfo);
                     >
                       <option>text</option>
                       <option>radio</option>
-                      <option>multipe choice</option>
+                      <option value="multiple">multipe choice</option>
                     </Form.Select>
                   </Col>
                 </Form.Group>
@@ -188,17 +188,17 @@ console.log(userInfo);
                     Answer 
                    </Form.Label>
                    <Col sm='10'>
-                     <Form.Control question_type='text' placeholder='Anwser field avaiable for user' disabled  />
+                     <Form.Control question_type='text' placeholder='This field is avaiable for user only' disabled  />
                    </Col>
                  </Form.Group>
                 ) : (
-                  <div className="mt-5">
+                  <div className="mt-4">
                     {input.options &&
                       input.options.map((option, index2) => (
                         <>
                         <Form.Group as={Row} className='ml-5 mb-1 mt-1 ' controlId='formPlaintextEmail'>
           <Form.Label column sm='2'>
-            Question Option
+           Option {index2+1}
           </Form.Label>
           <Col sm='10'>
             <Form.Control name='qts' value={option.qts} question_type='text' placeholder='Add new question answer  '   onChange={(event) =>

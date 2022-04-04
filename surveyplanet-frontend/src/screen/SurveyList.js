@@ -9,7 +9,7 @@ const SurveyList = () => {
   return (
 
     
-    <div style={{backgroundColor:"#f3f7f7" }}>
+    <div style={{backgroundColor:"#f3f7f7", minHeight:'1000px' }}>
         <Header />
         <Container>       
         {userInfo.is_superuser ? <SurveyListForAdmin /> : <SurveyListForUser />} 

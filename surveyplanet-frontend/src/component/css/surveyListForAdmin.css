@@ -10,7 +10,7 @@
     background-color:#ffffff;
     margin: 10px;
     margin-bottom: 15px;
-    padding-top: 10px;
+    padding-top: 5px;
     border-radius: 5px;
 
 }
@@ -21,11 +21,17 @@
 .col1{
     color: black;
     height: 50px;
-    border-right: 1px solid gray;
     cursor: pointer;
 }
 
 .col2{
   
     cursor: pointer;
+}
+
+.col22{
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    cursor: pointer;
+    border-radius: 5px;
 }

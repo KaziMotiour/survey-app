@@ -16,6 +16,7 @@ const Login = () => {
     const [password, setPassword] = useState()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
+    const [error2, setError2] = useState(false)
     const userInfo = localStorage.getItem('userInfo')
     const [message, setMessge] = useState('')
     let cmMessage = null;
@@ -61,6 +62,8 @@ const Login = () => {
                       // The request was made but no response was received
                       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                       // http.ClientRequest in node.js
+                      setLoading(false)
+                      setError2(true)
                       // console.log(error.request,'req');
                     } else {
                       // Something happened in setting up the request that triggered an Error
@@ -112,7 +115,7 @@ const Login = () => {
 
                 </Form.Control>
             </Form.Group>
-
+            {error2 && <p style={{color:'red'}}>Surver is Not running</p>}
             {loading ? <Spinner animation="grow" /> : 
             <Button type="submit" varient="primary">
                 Sing In

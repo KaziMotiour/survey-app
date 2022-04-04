@@ -29,7 +29,7 @@ def CreateSurvey(request):
     createSurveyInfo = CreateSurveySerializer(data=surveyInfo)
     if createSurveyInfo.is_valid():
         createSurveyInfo.save()
-        print('valid')
+
     else:
         Response(createSurveyInfo.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -40,13 +40,16 @@ def CreateSurvey(request):
                 data={'survay_of_question': createSurveyInfo.data['id'], 'question_title': question['question_title'], 'question_type': question['question_type']})
             if createSurveyQuestion.is_valid():
                 createSurveyQuestion.save()
-                print('valid quesion')
+                
             else:
                 print(createSurveyQuestion.errors)
 
             if question['question_type'] != 'text':
+                empty=True
                 for options in question['options']:
                     if options['qts']:
+                        
+                        empty=False
                         question_option = CreateQuestionOptionsSerializer(data={
                             'survey_question':createSurveyQuestion.data['id'], 'survay_of_option':createSurveyInfo.data['id'], 'option':options['qts']})
                         if question_option.is_valid():
@@ -54,7 +57,15 @@ def CreateSurvey(request):
                             question_option.save()
                         else:
                             print(question_option.errors)
+                if empty:
+                    print(createSurveyQuestion.data['question_title'])
+                    obj = Servay_Question.objects.filter(question_title__icontains=createSurveyQuestion.data['question_title'])[0]
+                    obj.delete()
+                    
 
     # print(surveyQuestion)
+    if createSurveyInfo:
 
-    return Response('success')
+        return Response('success', status=status.HTTP_200_OK)
+    else:
+         return Response('fail', status=status.HTTP_400_BAD_REQUEST)
