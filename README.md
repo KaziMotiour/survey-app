@@ -23,7 +23,7 @@ https://survey--planet.herokuapp.com/
 * pip install -r requirements.txt  -> run this command to install all the pakedges.
 * python manage.py makemigrations  -> run this comman it will generates the SQL commands for preinstalled apps.
 * python manage.py migrate -> run this command it will executes those SQL commands in the database file.
-* python manage.py createsuperuser -> This command will allow you to create superuser. This superuser will be you admin user
+* python manage.py createsuperuser -> This command will allow you to create superuser. This superuser will be your admin user.
 * python manage.py runserver -> It will run the server/backend server
 
 ### Frontend/client Part
