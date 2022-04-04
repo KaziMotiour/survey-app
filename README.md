@@ -17,8 +17,8 @@ https://survey--planet.herokuapp.com/
 ## To Run This Application yo need to follow those steps bellow
 ### Backend/server Part
 * cd surveyplanet  -> Change File directory to django project directory.
-* Create a database from Postgresql.
-* Setup database form setting.py in surveyplanet directory.
+* Create a database from postgresql.
+* Setup database from setting.py in surveyplanet directory.
 * create and activate virualenv to install all the pakedge / Or you can install it in you local machine.
 * pip install -r requirements.txt  -> run this command to install all the pakedges.
 * python manage.py makemigrations  -> run this comman it will generates the SQL commands for preinstalled apps.
