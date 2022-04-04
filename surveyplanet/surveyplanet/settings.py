@@ -83,15 +83,26 @@ WSGI_APPLICATION = 'surveyplanet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'survey-planet',
+        'USER':'postgres',
+        'PASSWORD':'vaio123#',
+        'HOST':'localhost',
     }
 }
 
+
 CORS_ALLOWED_ORIGINS = [
-    "https://survey--planet.herokuapp.com/",
+    "https://survey--planet.herokuapp.com",
     "http://localhost:8080",
     "http://localhost:3000",
 ]

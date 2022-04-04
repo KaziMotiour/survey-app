@@ -8,19 +8,31 @@ from rest_framework import status
 # Create your views here.
 
 
+# @dec Get Survey List
+# @route GET /survey/list
+# @access IsAuthenticated
 class SurveyListApiView(ListAPIView):
     serializer_class = SurveySerializer
+    permission_classes = [IsAuthenticated]
     queryset = Survey.objects.all()
 
 
+
+# @dec Retrive Survey Detail 
+# @route GET /survey/detail/survey_id
+# @access IsAuthenticated
 class SurveyDetailApiView(RetrieveAPIView):
     serializer_class = SurveySerializer
+    permission_classes = [IsAuthenticated]
     queryset = Survey.objects.all()
 
-# [{'question_title': '1111111111', 'question_type': 'radio', 'options': [{'qts': 'adsf'}, {'qts': 'afd'}]}]
 
 
+# @dec Create New Suervy
+# @route POST /survey/create
+# @access IsAdminUser
 @api_view(['POST'])
+@permission_classes([IsAdminUser])
 def CreateSurvey(request):
 
     surveyInfo = request.data.get('surveyInfo')

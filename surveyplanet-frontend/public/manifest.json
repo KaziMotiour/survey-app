@@ -5,16 +5,16 @@
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
-      "question_type": "image/x-icon"
+      "type": "image/x-icon"
     },
     {
       "src": "logo192.png",
-      "question_type": "image/png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
       "src": "logo512.png",
-      "question_type": "image/png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],

@@ -2,43 +2,41 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Container,
-Row,
-Col,
-Form,
-InputGroup,
-FormControl,
-Button,
-Modal,
+  Row,
+  Col,
+  Form,
+  Button,
+  Modal,
 } from "react-bootstrap";
-import {useParams, useHistory} from 'react-router-dom'
-import Header from '../component/Header'
+import { useParams, useHistory } from "react-router-dom";
+import Header from "../component/Header";
 
 const AttendSurvey = () => {
-  // localStorage.removeItem('userInfo')
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-  
-  const history = useHistory()  
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const history = useHistory();
   const [surveyQuestion, setSurveyQuestion] = useState();
   const [questionIndex, setQuestionIndex] = useState(0);
   const [seconds, setseconds] = useState(59);
   const [minutes, setMinutes] = useState(0);
   const [questionAnser, setQuestionAnser] = useState([]);
-  const [recordSubmited, setRecordSubmited] = useState(false)
+  const [recordSubmited, setRecordSubmited] = useState(false);
+
   const lenghtOfQuestion =
     surveyQuestion &&
     surveyQuestion.survay_of_question &&
     surveyQuestion.survay_of_question.length;
-  const {id} = useParams()
+  const { id } = useParams();
   var timer;
 
-  useEffect(()=>{
-
-    if(!userInfo){
-      history.push('/login')
+  // Redirect unauthorized user to login form 
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
     }
+  }, [userInfo]);
 
-  },[userInfo])
-
+  // Hander timer seconds to minutes
   useEffect(() => {
     timer = setInterval(() => {
       setseconds(seconds - 1);
@@ -55,65 +53,78 @@ const AttendSurvey = () => {
     return () => clearInterval(timer);
   });
 
+    // Handle submit survey
   const submitSurvey = async () => {
     clearInterval(timer);
     const config = {
-        headers: {
-            "content-type": "application/json",
-            Authorization: "Bearer "+userInfo.access,
-        },
-      };
+      headers: {
+        "content-type": "application/json",
+        Authorization: "Bearer " + userInfo.access,
+      },
+    };
 
-    try{
-    const datas = await axios.post(" http://127.0.0.1:8000/user/survey/record/",{surveyQuestion}, config);
-    const {data} = datas
-    
+    try {
+      const datas = await axios.post(
+        " http://127.0.0.1:8000/user/survey/record/",
+        { surveyQuestion },
+        config
+      );
+      const { data } = datas;
 
-  if(data=='success'){
-    
+      if (data == "success") {
+        history.push({
+          pathname: "/record-success",
+          state: {
+            detail:
+              surveyQuestion && surveyQuestion.title && surveyQuestion.title,
+          },
+        });
+      }
+    } catch (error) {
+     
       history.push({
-        pathname: "/record-success",
+        pathname: "/record-fail",
         state: {
-          detail: surveyQuestion && surveyQuestion.title && surveyQuestion.title,
+          detail:
+            surveyQuestion && surveyQuestion.title && surveyQuestion.title,
         },
       });
     }
-    
-  }catch(error){
-    console.log(error);
-    history.push({
-      pathname: "/record-fail",
-      state: {
-        detail: surveyQuestion && surveyQuestion.title && surveyQuestion.title,
-      },
-    });
+  };
 
-  }
-}
+  // Change question forward
   const nextQuestion = () => {
     setQuestionIndex(questionIndex + 1);
   };
+
+  // Change question backword
   const previousQuestion = () => {
     setQuestionIndex(questionIndex - 1);
   };
 
-  useEffect( () => {
-    getSurveyQuestis()
+
+  // Get survey question list
+  useEffect(() => {
+    getSurveyQuestions();
   }, []);
 
-  const getSurveyQuestis = async () =>{
+  // Handle get survey question list
+  const getSurveyQuestions = async () => {
     try {
       const config = {
         headers: {
-            "content-type": "application/json",
-            Authorization: "Bearer "+userInfo.access,
+          "content-type": "application/json",
+          Authorization: "Bearer " + userInfo.access,
         },
       };
-      const data = await axios.get(`http://127.0.0.1:8000/survey/detail/${id}`, config);
+      const data = await axios.get(
+        `http://127.0.0.1:8000/survey/detail/${id}`,
+        config
+      );
+
       const survayQ = data.data;
-      console.log(survayQ);
-      if(survayQ.is_complete===true){
-        history.push('/')
+      if (survayQ.is_complete === true) {
+        history.push("/");
       }
       const finalSurveyQ = {
         ...survayQ,
@@ -134,15 +145,10 @@ const AttendSurvey = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  // question:data.question.length<1 ?data.question : data.question.map(quesions=>({
-  //     ...quesions,
-  //     is_checked:false
-  // }))
-
+  // Handle select and unselect item from questions 
   const checkItem = (questionIndexs, index, type) => {
-    console.log(questionIndexs, index, type);
     const data = surveyQuestion;
 
     if (type === "radio") {
@@ -150,7 +156,7 @@ const AttendSurvey = () => {
         ...data,
         survay_of_question: data.survay_of_question.map((data, index) => {
           if ((data.question_type === "radio") & (index === questionIndexs)) {
-            console.log("commed");
+
             return {
               ...data,
               question: data.question.map((option, index) => ({
@@ -186,12 +192,12 @@ const AttendSurvey = () => {
     }
   };
 
+  // Handle text question input
   const handleTextInput = (questionIndex, e) => {
     const exist = questionAnser.filter((item) => item.id === questionIndex);
-    console.log(exist, "log");
     let newArray = [...questionAnser];
     if (exist.length !== 0) {
-      console.log("exist");
+
       const newItems = newArray.map((item) => {
         if (questionIndex === item.id) {
           return { ...item, answer: e.target.value };
@@ -200,7 +206,7 @@ const AttendSurvey = () => {
       });
       setQuestionAnser(newItems);
     } else {
-      console.log("not exist");
+
       setQuestionAnser([
         ...questionAnser,
         { id: questionIndex, answer: e.target.value },
@@ -214,9 +220,10 @@ const AttendSurvey = () => {
     };
 
     setSurveyQuestion(updateData);
-    console.log(questionAnser);
+
   };
 
+  // Return text question value to input
   const returnText = (questionIndex) => {
     const exist = questionAnser.filter((item) => item.id === questionIndex);
     if (exist.length !== 0) {
@@ -226,71 +233,88 @@ const AttendSurvey = () => {
     }
   };
 
-  console.log(surveyQuestion);
+
   return (
     <div>
       <Header />
-    <Container>
-      <div >
-       <h3>Survey Title: {surveyQuestion && surveyQuestion.title && surveyQuestion.title}<span></span></h3> 
-       <h3>Time Duration: {surveyQuestion && surveyQuestion.timer &&  surveyQuestion.timer}<span></span></h3> 
-       
-        <p style={{fontSize:'20px'}}>
-          Time Left: {minutes}:{seconds}
-        </p>
-        <p style={{fontSize:'20px'}}>
-          Question {questionIndex+1} Out of {lenghtOfQuestion}
-        </p>
-        {recordSubmited && <p style={{color:'red'}}> You have not answerd any quesion, Please answer the question first then submit the survey.  </p>}
-      </div>
+      <Container>
+        <div>
+          <h3>
+            Survey Title:{" "}
+            {surveyQuestion && surveyQuestion.title && surveyQuestion.title}
+            <span></span>
+          </h3>
+          <h3>
+            Time Duration:{" "}
+            {surveyQuestion && surveyQuestion.timer && surveyQuestion.timer}
+            <span></span>
+          </h3>
 
-      <Modal.Dialog>
-          
-        <Modal.Header>
-          <Modal.Title>
+          <p style={{ fontSize: "20px" }}>
+            Time Left: {minutes}:{seconds}
+          </p>
+          <p style={{ fontSize: "20px" }}>
+            Question {questionIndex + 1} Out of {lenghtOfQuestion}
+          </p>
+          {recordSubmited && (
+            <p style={{ color: "red" }}>
+              {" "}
+              You have not answerd any quesion, Please answer the question first
+              then submit the survey.{" "}
+            </p>
+          )}
+        </div>
+
+        <Modal.Dialog>
+          <Modal.Header>
+            <Modal.Title>
+              {surveyQuestion &&
+              surveyQuestion.survay_of_question.length > 0 &&
+              surveyQuestion.survay_of_question[questionIndex].question_title
+                ? surveyQuestion.survay_of_question[questionIndex]
+                    .question_title
+                : ""}
+            </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
             {surveyQuestion &&
-              surveyQuestion.survay_of_question.length>0 &&
-              surveyQuestion.survay_of_question[questionIndex].question_title ? surveyQuestion.survay_of_question[questionIndex].question_title:""    }
-          </Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          {surveyQuestion &&
-          surveyQuestion.survay_of_question.length>0   &&
-          surveyQuestion.survay_of_question[questionIndex].question_type ===
-            "text" ? (
-            <Form>
-              <Form.Group
-                as={Row}
-                className='mb-5'
-                controlId='formPlaintextPassword'
-              >
-                <Form.Label column sm='2'>
-                  answer
-                </Form.Label>
-                <Col sm='10' className='ml-2'>
-                  <input
-                    type='text'
-                    name='answer'
-                    placeholder='Answer'
-                    value={returnText(questionIndex)}
-                    onChange={(e) => {
-                      handleTextInput(questionIndex, e);
-                    }}
-                  />
-                </Col>
-              </Form.Group>
-            </Form>
-          ) : surveyQuestion &&
-            surveyQuestion.survay_of_question.length>0 &&
+            surveyQuestion.survay_of_question.length > 0 &&
             surveyQuestion.survay_of_question[questionIndex].question_type ===
-              "radio" ? (
-            <Form>
-              <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-                {surveyQuestion &&
-                  surveyQuestion.survay_of_question.length>0 &&
-                  surveyQuestion.survay_of_question[questionIndex].question.map(
-                    (question, index) => (
+              "text" ? (
+              <Form>
+                <Form.Group
+                  as={Row}
+                  className='mb-5'
+                  controlId='formPlaintextPassword'
+                >
+                  <Form.Label column sm='2'>
+                    answer
+                  </Form.Label>
+                  <Col sm='10' className='ml-2'>
+                    <input
+                      type='text'
+                      name='answer'
+                      placeholder='Answer'
+                      value={returnText(questionIndex)}
+                      onChange={(e) => {
+                        handleTextInput(questionIndex, e);
+                      }}
+                    />
+                  </Col>
+                </Form.Group>
+              </Form>
+            ) : surveyQuestion &&
+              surveyQuestion.survay_of_question.length > 0 &&
+              surveyQuestion.survay_of_question[questionIndex].question_type ===
+                "radio" ? (
+              <Form>
+                <Form.Group className='mb-3' controlId='formBasicCheckbox'>
+                  {surveyQuestion &&
+                    surveyQuestion.survay_of_question.length > 0 &&
+                    surveyQuestion.survay_of_question[
+                      questionIndex
+                    ].question.map((question, index) => (
                       <Form.Check
                         key={index}
                         label={question.option}
@@ -301,76 +325,78 @@ const AttendSurvey = () => {
                         }
                         checked={question.is_checked ? true : false}
                       />
-                    )
-                  )}
-              </Form.Group>
-            </Form>
-          ) : (
-            <Form>
-              <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-                {surveyQuestion &&
-                  surveyQuestion.survay_of_question.length>0   &&
-                  surveyQuestion.survay_of_question[questionIndex].question &&
-                  surveyQuestion.survay_of_question[questionIndex].question.map(
-                    (question, index) => (
+                    ))}
+                </Form.Group>
+              </Form>
+            ) : (
+              <Form>
+                <Form.Group className='mb-3' controlId='formBasicCheckbox'>
+                  {surveyQuestion &&
+                    surveyQuestion.survay_of_question.length > 0 &&
+                    surveyQuestion.survay_of_question[questionIndex].question &&
+                    surveyQuestion.survay_of_question[
+                      questionIndex
+                    ].question.map((question, index) => (
                       <div key={index}>
-                       
-                          <Form.Check
-                            label={question.option}
-                            name='group1'
-                            type='checkbox'
-                            checked={question.is_checked ?true : false}
-                            onClick={(e) =>
-                              checkItem(questionIndex, index, "checkbox")
-                            }
-                          />
-                      
-                         
+                        <Form.Check
+                          label={question.option}
+                          name='group1'
+                          type='checkbox'
+                          checked={question.is_checked ? true : false}
+                          onClick={(e) =>
+                            checkItem(questionIndex, index, "checkbox")
+                          }
+                        />
                       </div>
-                    )
-                  )}
-              </Form.Group>
-            </Form>
-          )}
-        </Modal.Body>
+                    ))}
+                </Form.Group>
+              </Form>
+            )}
+          </Modal.Body>
 
-        <Modal.Footer>
-          <Button onClick={() => history.push('/')} style={{ marginRight: "auto" }} variant='secondary'>
-            quit survey
-          </Button>
-          {questionIndex == lenghtOfQuestion - 1 && (
+          <Modal.Footer>
             <Button
-            onClick={submitSurvey}
-              style={{ marginRight: "auto", marginLeft: "-120px" }}
-              variant='danger'
+              onClick={() => history.push("/")}
+              style={{ marginRight: "auto" }}
+              variant='secondary'
             >
-              Submit
+              quit survey
             </Button>
-          )}
+            {questionIndex == lenghtOfQuestion - 1 && (
+              <Button
+                onClick={submitSurvey}
+                style={{ marginRight: "auto", marginLeft: "-120px" }}
+                variant='danger'
+              >
+                Submit
+              </Button>
+            )}
 
-          {questionIndex === 0  ? lenghtOfQuestion >1     && (
-            <Button onClick={nextQuestion} variant='success'>
-              Next Question
-            </Button>
-          ) : questionIndex === lenghtOfQuestion - 1 ? (
-            <>
-              <Button onClick={previousQuestion} variant='primary'>
-                Prvious Question
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button onClick={previousQuestion} variant='primary'>
-                Prvious Question
-              </Button>
-              <Button onClick={nextQuestion} variant='success'>
-                Next Question
-              </Button>
-            </>
-          )}
-        </Modal.Footer>
-      </Modal.Dialog>
-    </Container>
+            {questionIndex === 0 ? (
+              lenghtOfQuestion > 1 && (
+                <Button onClick={nextQuestion} variant='success'>
+                  Next Question
+                </Button>
+              )
+            ) : questionIndex === lenghtOfQuestion - 1 ? (
+              <>
+                <Button onClick={previousQuestion} variant='primary'>
+                  Prvious Question
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button onClick={previousQuestion} variant='primary'>
+                  Prvious Question
+                </Button>
+                <Button onClick={nextQuestion} variant='success'>
+                  Next Question
+                </Button>
+              </>
+            )}
+          </Modal.Footer>
+        </Modal.Dialog>
+      </Container>
     </div>
   );
 };

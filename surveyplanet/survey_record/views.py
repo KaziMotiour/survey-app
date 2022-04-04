@@ -9,8 +9,11 @@ from survey.models import question_options
 from .serializers import surveyInfoSerialzers
 
 
-
+# @dec Record New Survay form user
+# @route POST user/survey/record/
+# @access IsAuthenticated
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def recordNewSurvey(request):
 
     reacord_created = False
@@ -55,8 +58,12 @@ def recordNewSurvey(request):
     
 
 
+# @dec Get Participated user and records
+# @route GET user/survey/participated-user/survey_id
+# @access IsAuthenticated
 class SurveyParticipatedUser(ListAPIView):
     serializer_class = surveyInfoSerialzers
+    permission_classes  = [IsAdminUser]
 
     def get_queryset(self):
         id = self.kwargs.get('pk')

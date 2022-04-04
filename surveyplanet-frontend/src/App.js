@@ -12,6 +12,7 @@ import RecordFailInfo from './screen/RecordFailInfo'
 import SurveyList from './screen/SurveyList'
 import SurveyReview from './screen/SurveyReview'
 import UserReview from './screen/UserReview'
+import {IsAdminRoute} from './PrivateRoute'
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -24,14 +25,14 @@ function App() {
    
       <Switch>
 
-              <Route path='/user-survey-review/:id' component={UserReview} exect />
-            <Route path='/survey-review/:id' component={SurveyReview} exect />
+              <IsAdminRoute path='/user-survey-review/:id' component={UserReview} exect />
+            <IsAdminRoute path='/survey-review/:id' component={SurveyReview} exect />
             <Route path='/record-fail' component={RecordFailInfo} exect />
             <Route path='/record-success' component={RecordSuccessInfo} exect />
               
             <Route path='/registration' component={RegisterScreen} exect />
             <Route path='/login' component={Login} exect />
-            <Route path='/create-survey' component={CreateSurvey} exect />
+            <IsAdminRoute path='/create-survey' component={CreateSurvey} exect />
             <Route path='/attending-survey/:id' component={AttendSurvey} exect />
             <Route path='/' component={SurveyList} exect />
 

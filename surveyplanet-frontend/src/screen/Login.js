@@ -5,12 +5,11 @@ import axios from 'axios'
 import {Form, Button, Row, Col, Alert, Spinner, Container} from 'react-bootstrap'
 
 
-import {useHistory, useLocation} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import Header from '../component/Header'
 
 
 const Login = () => {
-    const location = useLocation()
     const history = useHistory()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -18,18 +17,19 @@ const Login = () => {
     const [error, setError] = useState()
     const [error2, setError2] = useState(false)
     const userInfo = localStorage.getItem('userInfo')
-    const [message, setMessge] = useState('')
     let cmMessage = null;
     if (history.location.state) {
         cmMessage = history.location.state.detail;
       }
 
+// Redirect authorized user to home page 
     useEffect(()=>{
         if(userInfo){
             history.push('/')
         }
     },[history, userInfo])
     
+    // Handle submit login form
     const submitHandler = async (e) =>{
         e.preventDefault()
         if(history.location.state){
@@ -39,7 +39,7 @@ const Login = () => {
             setLoading(true)
               await axios.post('http://127.0.0.1:8000/api/token/', {email, password}).then(res =>{
                 localStorage.setItem('userInfo', JSON.stringify(res.data))
-                console.log(res.data);
+               
                 setLoading(false)
                 goToHome()
                 
@@ -53,7 +53,7 @@ const Login = () => {
                       // console.log(error.response.data.detail, 'res_data');
                       const errors = error.response.data.detail
                       setError(errors)
-                    console.log(errors);
+                    
                       setLoading(false)
                       // console.log(error);
                       // console.log(error.response.status, 'res_status');
@@ -77,6 +77,7 @@ const Login = () => {
       
 
     }
+
     async function goToHome() {
         await new Promise((resolve) =>
           setTimeout(() => {
