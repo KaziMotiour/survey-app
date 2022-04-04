@@ -14,13 +14,13 @@ https://survey--planet.herokuapp.com/
 * React
 * Bootstrap
 
-## To Run This Application yo need to follow those command bellow
+## To Run This Application yo need to follow those steps bellow
 ### Backend/server Part
 * cd surveyplanet  -> Change File directory to django project directory.
 * Create a database from Postgresql.
 * Setup database form setting.py in surveyplanet directory.
-* create and activate virualenv to install pakedge / Or you can install it in you local machine.
-* pip install -r requirements.txt  -> run this command to install pakedge.
+* create and activate virualenv to install all the pakedge / Or you can install it in you local machine.
+* pip install -r requirements.txt  -> run this command to install all the pakedges.
 * python manage.py makemigrations  -> run this comman it will generates the SQL commands for preinstalled apps.
 * python manage.py migrate -> run this command it will executes those SQL commands in the database file.
 * python manage.py runserver -> It will run the server/backend server
