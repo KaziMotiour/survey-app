@@ -10,6 +10,7 @@ import Header from './component/Header'
 import RecordSuccessInfo from './screen/RecordSuccessInfo'
 import RecordFailInfo from './screen/RecordFailInfo'
 import SurveyList from './screen/SurveyList'
+import SurveyReview from './screen/SurveyReview'
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -21,6 +22,8 @@ function App() {
     <main className='py-3'>
    
       <Switch>
+
+            <Route path='/survey-review/:id' component={SurveyReview} exect />
             <Route path='/record-fail' component={RecordFailInfo} exect />
             <Route path='/record-success' component={RecordSuccessInfo} exect />
               

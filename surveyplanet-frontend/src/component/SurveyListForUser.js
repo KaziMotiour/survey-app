@@ -12,6 +12,7 @@ import {
 import "./css/surveyListForAdmin.css";
 import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
+import { FaCheck } from "react-icons/fa";
 
 
 const SurveyListForUser = () => {
@@ -58,25 +59,27 @@ const SurveyListForUser = () => {
       {surveyList &&
         surveyList.map((survey, index) => {
           return survey.is_complete ? (
-            <Row key={index} className='survey-Row' style={{backgroundColor:"#ffffff"}}>
+            <Row key={index} className='survey-Row' >
               <Col className='col1' md={8}>
                 {survey.title}
+                <p style={{color:'red', fontSize:12}}>(Thank's you have completed the survey)</p>
               </Col>
               <Col className='col2' style={{ color: "red" }}>
                 {" "}
-                Thank's you have completed the survey{" "}
+                <Button variant="outline-primary">Attended <FaCheck /> </Button>
               </Col>
             </Row>
           ) : (
-            <Row key={index} className='survey-Row'  style={{backgroundColor:"#ffffff"}}>
+            <Row key={index} className='survey-Row' >
               <Col onClick={e=> attendingSurvey(survey.id)} className='col1' md={8}>
                  
               {survey.title}
+              <p style={{color:'gray', fontSize:12}}>(Click on survey title to attend this survey)</p>
              
               </Col>
               <Col onClick={e=> attendingSurvey(survey.id)} className='col2' style={{ color: "blue   " }}>
                
-                Click on survey title to attend this survey
+               <Button variant="outline-primary">Attend To Survey</Button>
               </Col>
             </Row>
           );

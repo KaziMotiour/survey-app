@@ -104,7 +104,7 @@ console.log(userInfo);
     <div>    
       <Header />
       <Container>
-      <h1>Create a new survey</h1>
+      <h1 style={{marginBottom:'30px'}}>Create a new survey</h1>
 
       <Form>
           {emptyField && <h5 style={{color:'red', marginBottom:20}}>Please fill up the empty fields</h5>}
@@ -167,7 +167,7 @@ console.log(userInfo);
                   controlId='formPlaintextEmail'
                 >
                   <Form.Label column sm='2'>
-                  Question question_type
+                   question_type
                   </Form.Label>
                   <Col sm='10'>
                     <Form.Select
@@ -185,7 +185,7 @@ console.log(userInfo);
                 {input.question_type === "text" ? (
                    <Form.Group as={Row} className='mb-2' controlId='formPlaintextEmail'>
                    <Form.Label column sm='2'>
-                    Answer question_type
+                    Answer 
                    </Form.Label>
                    <Col sm='10'>
                      <Form.Control question_type='text' placeholder='Anwser field avaiable for user' disabled  />

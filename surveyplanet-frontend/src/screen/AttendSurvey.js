@@ -64,19 +64,12 @@ const AttendSurvey = () => {
         },
       };
 
+    try{
     const datas = await axios.post(" http://127.0.0.1:8000/user/survey/record/",{surveyQuestion}, config);
     const {data} = datas
     
 
-    if(data=='fail'){
-  
-      history.push({
-        pathname: "/record-fail",
-        state: {
-          detail: surveyQuestion && surveyQuestion.title && surveyQuestion.title,             
-        },
-      });
-    }else if(data=='success'){
+  if(data=='success'){
     
       history.push({
         pathname: "/record-success",
@@ -86,8 +79,17 @@ const AttendSurvey = () => {
       });
     }
     
-  };
+  }catch(error){
+    console.log(error);
+    history.push({
+      pathname: "/record-fail",
+      state: {
+        detail: surveyQuestion && surveyQuestion.title && surveyQuestion.title,
+      },
+    });
 
+  }
+}
   const nextQuestion = () => {
     setQuestionIndex(questionIndex + 1);
   };

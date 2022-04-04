@@ -52,6 +52,10 @@ const SurveyListForAdmin = () => {
 
     }
 
+    const getSurveyReview = (id) =>{
+        history.push('/survey-review/'+id)
+    }
+
   return (
 
       <Container>
@@ -62,9 +66,9 @@ const SurveyListForAdmin = () => {
 
 
     {surveyList && surveyList .map((survey, index)=>(
-    <Row key={index} className='survey-Row'  style={{backgroundColor:"#ffffff"}}>
-        <Col className='col1' md={8}><h6>{survey.title}</h6> <p style={{color:"gray", fontSize:'13px'}}>(click here to see the survey review)</p></Col>
-        <Col className='col2' style={{color:'blue'}}> {survey.participants} user completed this survey {survey.participants >0 && <p style={{color:"gray"}}>(click here to see the user review)</p>} </Col>
+    <Row key={index} className='survey-Row'  >
+        <Col className='col1' onClick={(e) => getSurveyReview(survey.id)} md={8}><h6>{survey.title}</h6> <p style={{color:"gray", fontSize:'13px'}}>(click here to see the survey review)</p></Col>
+        <Col className='col2' style={{color:'blue'}}> {survey.participants} user completed this survey {survey.participants >0 && <p style={{color:"gray", fontSize:'13px'}}>(click here to see the user review)</p>} </Col>
     </Row>  
     
 ))}    

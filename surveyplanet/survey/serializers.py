@@ -3,16 +3,17 @@ from .models import Survey, Servay_Question, question_options
 from django.contrib.auth import  get_user_model
 User= get_user_model()
 from survey_record.models import SurveyInfo, QuestionAnswer
+from survey_record.models import QuestionAnswer
 
 
 
 class QuestionOptionsSerializer(serializers.ModelSerializer):
-    voer_count = serializers.SerializerMethodField(read_only=True)
+    vot_count = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = question_options
-        fields=['id', 'option', 'voer_count']
+        fields=['id', 'option', 'vot_count']
 
-    def get_voer_count(self, obj):
+    def get_vot_count(self, obj):
         
         count = QuestionAnswer.objects.filter(option_answer=obj).count()
         return count
@@ -20,12 +21,18 @@ class QuestionOptionsSerializer(serializers.ModelSerializer):
 
 
 
+class QuestionAnswerSerialzers(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionAnswer
+        fields = ['text_answer',]
+
 class ServayQuestionSerializer(serializers.ModelSerializer):
     question = QuestionOptionsSerializer(many=True)
     text_answer = serializers.SerializerMethodField(read_only=True)
+    question_from = QuestionAnswerSerialzers(many=True)
     class Meta:
         model = Servay_Question
-        fields=['id', 'question_title', 'question_type', 'question', 'text_answer']
+        fields=['id', 'question_title', 'question_type', 'question', 'text_answer', 'question_from']
 
     def get_text_answer(self, obj):
         if(obj.question_type=='text'):

@@ -26,13 +26,19 @@ def recordNewSurvey(request):
             QAobj, created = QuestionAnswer.objects.get_or_create(survey_from=surveyInfoObj, question_from_id=question['id'], text_answer=question['answer'], question_type=question['question_type'])
             reacord_created=True
         else:
+            is_option = False
             QAobj, created = QuestionAnswer.objects.get_or_create(survey_from=surveyInfoObj, question_from_id=question['id'], question_type=question['question_type'])
             for options in question['question']:
                 if options['is_checked']:
                     print(options)
+                    is_option=True
                     qst = question_options.objects.get(pk=options['id'])
                     QAobj.option_answer.add(qst)
                     reacord_created=True
+            if not is_option:
+                option_obj = QuestionAnswer.objects.get(pk=QAobj.id)
+                option_obj.delete()
+
 
     if reacord_created:
         print(reacord_created, 'success')
@@ -42,6 +48,6 @@ def recordNewSurvey(request):
         print(reacord_created)
         survayInfo  = SurveyInfo.objects.get(pk=surveyInfoObj.id)
         survayInfo.delete()
-        return Response('fail', status=status.HTTP_200_OK)
+        return Response('fail', status=status.HTTP_400_BAD_REQUEST)
     
     
