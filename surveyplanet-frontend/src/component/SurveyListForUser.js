@@ -3,9 +3,13 @@ import {
   Container,
   Row,
   Col,
+  Form,
+  InputGroup,
+  FormControl,
   Button,
+  Modal,
 } from "react-bootstrap";
-import "./css/surveyListForAdmin.css";
+import "./css/surveyUser.css";
 import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
@@ -16,8 +20,7 @@ const SurveyListForUser = () => {
   const [surveyList, setSurveyList] = useState();
   const userinfo = JSON.parse(localStorage.getItem("userInfo"));
   const user = userinfo ? userinfo : null;
-
-  // Redirect unauthorized user to login form
+  console.log(user);
   useEffect(() => {
     if (!userinfo) {
       history.push("/login");
@@ -36,13 +39,11 @@ const SurveyListForUser = () => {
     getSurveyList(config);
   }, []);
 
-  //  Get survey list for User
   const getSurveyList = async (config) => {
     const data = await axios.get(" http://127.0.0.1:8000/survey/list", config);
     setSurveyList(data.data);
   };
 
-  // redirect user to attend survay page
   const attendingSurvey = (id) => {
     history.push("/attending-survey/" + id);
   };
@@ -61,9 +62,9 @@ const SurveyListForUser = () => {
               <Col className='col1' md={8}>
                 {survey.title}
               </Col>
-              <Col className='col2' style={{ color: "red" }}>
+              <Col md={3} className='col2' style={{ color: "red" }}>
                 {" "}
-                <Button variant='outline-primary'>
+                <Button style={{ float:'right' }}    variant='outline-primary'>
                   Attended <FaCheck />{" "}
                 </Button>
               </Col>
@@ -80,9 +81,11 @@ const SurveyListForUser = () => {
               <Col
                 onClick={(e) => attendingSurvey(survey.id)}
                 className='col2'
-                style={{ color: "blue   " }}
+                md={3}
+                style={{ color: "blue" }}
+                
               >
-                <Button variant='outline-primary'>Attend To Survey</Button>
+                <Button   style={{ float:'right' }} variant='outline-primary'>Attend To Survey</Button>
               </Col>
             </Row>
           );

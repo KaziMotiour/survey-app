@@ -5,7 +5,7 @@ import {
   Col,
   Button,
 } from "react-bootstrap";
-import "./css/surveyListForAdmin.css";
+import "./css/surveyAdmin.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -72,11 +72,12 @@ const SurveyListForAdmin = () => {
 
       {surveyList &&
         surveyList.map((survey, index) => (
-          <Row key={index} className='survey-Row'>
+          <Row key={index} className='survey-admin-Row'>
             <Col
-              className='col1'
+              className='col1-admin'
               onClick={(e) => getSurveyReview(survey.id)}
               md={8}
+
             >
               <h6>{survey.title}</h6>{" "}
               <p style={{ color: "gray", fontSize: "13px" }}>
@@ -85,7 +86,7 @@ const SurveyListForAdmin = () => {
             </Col>
             {survey.participants > 0 ? (
               <Col
-                className='col22'
+                className='col22-admin'
                 style={{ color: "blue" }}
                 onClick={(e) => getUserReview(survey.id)}
               >
@@ -96,7 +97,7 @@ const SurveyListForAdmin = () => {
                 </p>{" "}
               </Col>
             ) : (
-              <Col className='col2' style={{ color: "gray" }}>
+              <Col className='col2-admin' style={{ color: "gray" }}>
                 {" "}
                 {survey.participants} user completed this survey{" "}
               </Col>

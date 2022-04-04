@@ -1,0 +1,53 @@
+
+.title_row{
+    
+    margin: 20px;
+    margin-bottom: 40px;   
+}
+
+
+.survey-admin-Row{
+    height: 70px;
+    margin: 10px;
+    margin-bottom: 15px;
+    padding-top: 5px;
+    border-radius: 5px;
+
+}
+
+
+.col1-admin{
+    
+    color: black;
+    height: 70px;
+    cursor: pointer;
+    margin-right: 10px;
+    background-color:#ffffff;
+    padding: 10px;
+}
+.col1-admin:hover{
+    background-color:#f9fcfc;
+
+}
+
+.col2-admin{
+  
+    cursor: pointer;
+    padding: 10px;
+}
+.col2-admin:hover{
+    background-color:#f9fcfc;
+}
+
+
+.col22-admin{
+    
+    cursor: pointer;
+    border-radius: 5px;
+    background-color:#ffffff;
+}
+
+.col22-admin:hover{
+    background-color:#f9fcfc;
+}
+

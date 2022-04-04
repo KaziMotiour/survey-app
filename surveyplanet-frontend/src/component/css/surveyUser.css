@@ -1,7 +1,7 @@
 .title_row{
     
     margin: 20px;
-    margin-bottom: 40px;   
+    margin-bottom: 40px;      
 }
 
 
@@ -9,8 +9,9 @@
     height: 70px;
     background-color:#ffffff;
     margin: 10px;
+    padding: 10px;
     margin-bottom: 15px;
-    padding-top: 5px;
+    padding-top: 15px;
     border-radius: 5px;
 
 }
@@ -27,11 +28,4 @@
 .col2{
   
     cursor: pointer;
-}
-
-.col22{
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    cursor: pointer;
-    border-radius: 5px;
 }
